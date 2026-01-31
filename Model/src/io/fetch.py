@@ -26,11 +26,14 @@ def fetch_dates(n=3):
     past_dates = sorted(past_dates)
     return past_dates + [today]
 
-def validate_date(startDate):
+def validate_date(startDate, verbose=1):
     try:
         datetime.datetime.strptime(startDate, "%Y-%m-%d")
-    except ValueError:
-        raise ValueError(f"Invalid format '{startDate}', expected YYYY-MM-DD")
+        return True
+    except Exception as e:
+        if verbose>0:
+            print(f"Invalid format '{startDate}', expected YYYY-MM-DD")
+        return False
 
 def get_q_dates(year):
     assert isinstance(year, (int, str)), "year has invalid data type"
