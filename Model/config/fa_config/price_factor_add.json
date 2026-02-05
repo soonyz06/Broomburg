@@ -1,0 +1,25 @@
+{
+  "price_change": {
+   	"HML_5": [-5, 0, "years", -1],
+  	"HML_3": [-3, 0, "years", -1],
+  	"HML_2": [-2, 0, "years", -1],
+   	"UMD_2_12": [-12, -1, "months", 1],
+	"UMD_7_12": [-12, -6, "months", 1],
+   	"UMD_2_6": [-6, -1, "months", 1],
+	"STR_6": [-6, 0, "months", -1],
+   	"STR_1": [-1, 0, "months", -1]
+  },
+  "vol": {
+	"VOL_5": [5, "years"],
+	"VOL_3": [3, "years"],
+	"VOL_2": [2, "years"],
+	"VOL_1": [1, "years"],
+	"VOL_0.5": [0.5, "years"]
+  },
+  "beta": {
+	"Beta": [[1, 5], "years", 1]
+  },
+  "performance": {
+   	"returns": [0, 1, "years", 1]
+  }
+}

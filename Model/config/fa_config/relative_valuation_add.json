@@ -1,0 +1,120 @@
+{
+	"live_1": {
+		"Close": [["close"], "", "float"],
+		"MC": [["close", "DilutedAverageShares"], "mult", "int"]
+	},
+	"live_2": {
+		"EV": [["MC", "NetDebt", "Mezzaine"], "sum", "int"],
+		"EVAdj": [["MC", "NetDebtFloored", "Mezzaine"], "sum", "int"]
+	},
+	"live_3": {
+		"EVE": [["EVAdj", "NOPAT"], "divide", "float"],
+		"EVB": [["EVAdj", "TotalAssets"], "divide", "float"],
+		"EVS": [["EVAdj", "TotalRevenue"], "divide", "float"],
+		"PE": [["MC", "NetIncomeCommonStockholders"], "divide", "float"],
+		"PB": [["MC", "CommonStockEquity"], "divide", "float"],
+		"PS": [["MC", "TotalRevenue"], "divide", "float"],
+		"EVE_YIELD": [["NOPAT", "EVAdj"], "divide", "float"],
+		"EVB_YIELD": [["TotalEquityGrossMinorityInterest", "EVAdj"], "divide", "float"],
+		"EVS_YIELD": [["TotalRevenue", "EVAdj"], "divide", "float"],
+		"PE_YIELD": [["NetIncomeCommonStockholders", "MC"], "divide", "float"],
+		"PB_YIELD": [["CommonStockEquity", "MC"], "divide", "float"],
+		"PS_YIELD": [["TotalRevenue", "MC"], "divide", "float"],
+		"GP_EV": [["GrossProfit", "EVAdj"], "divide", "float"],
+		"EBIT_EV": [["OperatingIncome", "EVAdj"], "divide", "float"],
+		"CF_EV": [["OperatingCashFlow", "EVAdj"], "divide", "float"],
+		"CX_EV": [["CapitalExpenditure", "EVAdj"], "divide", "float"],
+		"FCF_EV": [["FreeCashFlow", "EVAdj"], "divide", "float"],
+		"CFI_EV": [["CashFlowFromContinuingInvestingActivities", "EVAdj"], "divide", "float"],
+
+		"CFF_MC": [["CashFlowFromContinuingFinancingActivities", "MC"], "divide", "float"],
+		"NI_MC": [["NI", "MC"], "divide", "float"],
+		"TA_MC": [["TangibleAssets", "MC"], "divide", "float"],
+		"NCAV_MC": [["NCAV", "MC"], "divide", "float"],
+		"Cash_MC": [["CashCashEquivalentsAndShortTermInvestments", "MC"], "divide", "float"],
+		"NetDebt_MC": [["NetDebt", "MC"], "divide", "float"],
+		"Interest_MC": [["NetInterestIncome", "MC"], "divide", "float"],
+		"MC_EV": [["MC", "EV"], "divide", "float"],
+		"Eq_EV": [["CommonStockEquity", "EV"], "divide", "float"]
+	},
+	"hidden_0":{
+		"DIO": [["Inventory", "CostOfRevenue"], "divide", "float"],
+		"DSO": [["AccountsReceivable", "TotalRevenue"], "divide", "float"],
+		"DPO": [["AccountsPayable", "CostOfRevenue"], "divide", "float"]
+	},
+	"static_1": {
+		"RevGrowth": [["RevGrowth"], "", "float"],
+		"GrossMargin": [["GrossMargin"], "", "float"],
+		"OpMargin": [["OpMargin"], "", "float"],
+		"NetMargin": [["NetMargin"], "", "float"],
+		"SG&A_Rev": [["SG&A_Rev"], "", "float"],
+		"R&D_Rev": [["R&D_Rev"], "", "float"],
+		"OtherEx_Rev": [["OtherEx_Rev"], "", "float"],
+		"EPS": [["EPS"], "", "float"],
+
+		"CFGrowth": [["CFGrowth"], "", "float"],
+		"CXChange":  [["CXChange"], "", "float"],
+		"FCFGrowth": [["FCFGrowth"], "", "float"],
+		"FCFMargin": [["FCFMargin"], "", "float"],
+
+		"D_E": [["D_E"], "", "float"],
+		"AssetsGrowth": [["AssetsGrowth"], "", "float"],
+		"TAGrowth": [["TAGrowth"], "", "float"],
+		"EquityGrowth": [["EquityGrowth"], "", "float"],
+		"ICGrowth": [["ICGrowth"], "", "float"]
+	},
+	"static_2": {
+		"Rev_IC": [["TotalRevenue", "InvestedCapital"], "divide", "float"],
+		"GP_IC": [["GrossProfit", "InvestedCapital"], "divide", "float"],
+		"ROIC":  [["OperatingIncome", "InvestedCapital"], "divide", "float"],
+		"CF_IC": [["OperatingCashFlow", "InvestedCapital"], "divide", "float"],
+		"FCF_IC": [["FreeCashFlow", "InvestedCapital"], "divide", "float"],
+		"Rev_CE": [["TotalRevenue", "CapitalEmployed"], "divide", "float"],
+		"GP_CE": [["GrossProfit", "CapitalEmployed"], "divide", "float"],
+		"ROCE":  [["OperatingIncome", "CapitalEmployed"], "divide", "float"],
+		"CF_CE": [["OperatingCashFlow", "CapitalEmployed"], "divide", "float"],
+		"FCF_CE": [["FreeCashFlow", "CapitalEmployed"], "divide", "float"],
+		"RevOTA": [["TotalRevenue", "TangibleAssets"], "divide", "float"],
+		"GPOTA": [["GrossProfit", "TangibleAssets"], "divide", "float"],
+		"ROTA": [["OperatingIncome", "TangibleAssets"], "divide", "float"],
+		"CFOTA": [["OperatingCashFlow", "TangibleAssets"], "divide", "float"],
+		"FCFOTA": [["FreeCashFlow", "TangibleAssets"], "divide", "float"],
+		"ROA":  [["OperatingIncome", "TotalAssets"], "divide", "float"],
+	
+		"NI_EQ": [["NI", "TotalEquityGrossMinorityInterest"], "divide", "float"],
+		"Net_EQ": [["NetIncome", "TotalEquityGrossMinorityInterest"], "divide", "float"],
+		"ROE": [["NetIncomeCommonStockholders", "CommonStockEquity"], "divide", "float"],
+
+		"Rev_NWC": [["TotalRevenue", "NWC"], "divide", "float"],
+		"NIMargin": [["NI", "TotalRevenue"], "divide", "float"],
+		"CX_Rev": [["CapitalExpenditure", "TotalRevenue"], "divide", "float"],
+		"CFI_CFO": [["CashFlowFromContinuingInvestingActivities", "OperatingCashFlow"], "divide", "float"],
+		"Interest_Yield": [["NetInterestIncome", "OperatingIncome"], "divide", "float"],
+		"Interest_Book": [["NetInterestIncome", "CommonStockEquity"], "divide", "float"],
+		"OpInc_D": [["OperatingIncome", "TotalDebt"], "divide", "float"],
+		"DFL": [["OperatingIncome", "OpIncLev"], "divide", "float"],
+		"CurrentRatio": [["CurrentAssets", "CurrentLiabilities"], "divide", "float"],
+		"CashRatio": [["CashCashEquivalentsAndShortTermInvestments", "CurrentLiabilities"], "divide", "float"],
+		"DIO": [["DIO", 365], "proportion", "float"],
+		"DSO": [["DSO", 365], "proportion", "float"],
+		"DPO": [["DPO", 365], "proportion", "float"],
+		"NCAV_Eq": [["NCAV", "CommonStockEquity"], "divide", "float"],
+		"Cash_Eq": [["CashCashEquivalentsAndShortTermInvestments", "CommonStockEquity"], "divide", "float"],
+		"NetDebt_Eq": [["NetDebt", "CommonStockEquity"], "divide", "float"],
+			
+		"GPGrowth": [["GrossProfit"], "change", "float"],
+		"OpIncGrowth": [["OperatingIncome"], "change", "float"],
+		"NetGrowth": [["NetIncomeCommonStockholders"], "change", "float"],
+		"SG&AGrowth": [["SellingGeneralAndAdministration"], "change", "float"],
+		"R&DGrowth": [["ResearchAndDevelopment"], "change", "float"],
+		"DebtGrowth": [["TotalDebt"], "change", "float"],
+		"CashGrowth": [["CashCashEquivalentsAndShortTermInvestments"], "change", "float"],
+		"NWCGrowth": [["NWC"], "change", "float"],
+		"InterestGrowth": [["NetInterestIncome"], "change", "float"]
+	},
+	"static_3": {
+		"GMGNGrowth": [["GrossMargin"], "change", "float"],
+		"OMGNGrowth": [["OpMargin"], "change", "float"],
+		"NMGNGrowth": [["NetMargin"], "change", "float"]
+	}
+}
