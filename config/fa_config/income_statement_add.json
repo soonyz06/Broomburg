@@ -1,0 +1,40 @@
+{
+	"static_1_hidden": {
+		"OtherOpEx": [["OperatingExpense", "SellingGeneralAndAdministration", "ResearchAndDevelopment"], "diff", "int"],
+		"OtherInc": [["PretaxIncome", "OperatingIncome", "NetInterestIncome"], "diff", "int"],
+		"OtherAfterTaxEx": [["PretaxIncome", "NetIncome", "TaxProvision"], "diff", "int"],
+		"OtherStockholders": [["NetIncomeCommonStockholders", "NetIncome"], "diff", "int"],
+		"NI": [["PretaxIncome", 0.8], "proportion", "int"],
+		"NOPAT": [["OperatingIncome", 0.8], "proportion", "int"],
+		"OpIncLev": [["OperatingIncome", "NetInterestIncome"], "diff", "int"]
+	},
+	"static_2": {
+		"TotalRevenue": [["TotalRevenue"], "", "int"],
+		"CostOfRevenue": [["CostOfRevenue"], "", "int"],
+		"GrossProfit": [["GrossProfit"], "", "int"],
+		"SellingGeneralAndAdministration": [["SellingGeneralAndAdministration"], "", "int"],
+		"ResearchAndDevelopment": [["ResearchAndDevelopment"], "", "int"],
+		"OtherOpEx": [["OtherOpEx"], "", "int"],
+		"OperatingExpense": [["OperatingExpense"], "", "int"],
+		"OperatingIncome": [["OperatingIncome"], "", "int"],
+		"NetInterestIncome": [["NetInterestIncome"], "", "int"],
+		"OtherInc": [["OtherInc"], "", "int"],
+		"PretaxIncome": [["PretaxIncome"], "", "int"],
+		"TaxProvision": [["TaxProvision"], "", "int"],
+		"OtherAfterTaxEx": [["OtherAfterTaxEx"], "", "int"],
+		"NetIncome": [["NetIncome"], "", "int"],
+		"OtherStockholders": [["OtherStockholders"], "", "int"],
+		"NetIncomeCommonStockholders": [["NetIncomeCommonStockholders"], "", "int"],
+		"DilutedAverageShares": [["DilutedAverageShares"], "", "int"]
+	},
+	"static_3": {
+		"RevGrowth": [["TotalRevenue"], "change", "float"],
+		"GrossMargin": [["GrossProfit", "TotalRevenue"], "divide", "float"],
+		"OpMargin": [["OperatingIncome", "TotalRevenue"], "divide", "float"],
+		"NetMargin": [["NetIncomeCommonStockholders", "TotalRevenue"], "divide", "float"],
+		"SG&A_Rev": [["SellingGeneralAndAdministration", "TotalRevenue"], "divide", "float"],
+		"R&D_Rev": [["ResearchAndDevelopment", "TotalRevenue"], "divide", "float"],
+		"OtherEx_Rev": [["OtherOpEx", "TotalRevenue"], "divide", "float"],
+		"EPS": [["NetIncomeCommonStockholders", "DilutedAverageShares"], "divide", "float"]
+	}
+}

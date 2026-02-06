@@ -1,0 +1,20 @@
+{
+	"date": "date",
+	"TotalRevenue": "Revenue",
+	"CostOfRevenue": "COGS",
+	"GrossProfit": "Gross Profit",
+	"SellingGeneralAndAdministration": "SG&A",
+	"ResearchAndDevelopment": "R&D",
+	"OtherOpEx": "Others",
+	"OperatingExpense": "Operating Expense",
+	"OperatingIncome": "Operating Income",
+	"NetInterestIncome": "Net Interest",
+	"OtherInc": "Other Income",
+	"PretaxIncome": "Pretax Income",
+	"TaxProvision": "Taxes",
+	"OtherAfterTaxEx": "After-Tax Adj",
+	"NetIncome": "Net Income",
+	"OtherStockholders": "Other Stockholders",
+	"NetIncomeCommonStockholders": "NI Common",
+	"DilutedAverageShares": "AvgShares"
+}

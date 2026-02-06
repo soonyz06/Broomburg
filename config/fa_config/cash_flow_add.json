@@ -1,0 +1,23 @@
+{
+	"static_1_hidden": {
+		"OtherNonCashAdj": [[ "CashFlowFromContinuingOperatingActivities", "NetIncome", "DepreciationAndAmortization" ], "diff", "int"]
+	},
+	"static_2": {
+		"NetIncome": [["NetIncome"], "", "int"],
+		"DepreciationAndAmortization": [["DepreciationAndAmortization"], "", "int"],
+		"OtherNonCashAdj": [["OtherNonCashAdj"], "", "int"],
+		"CashFlowFromContinuingOperatingActivities": [["CashFlowFromContinuingOperatingActivities"], "", "int"],
+		"CashFlowFromContinuingInvestingActivities": [["CashFlowFromContinuingInvestingActivities"], "", "int"],
+		"CashFlowFromContinuingFinancingActivities": [["CashFlowFromContinuingFinancingActivities"], "", "int"],
+		"ChangesInCash": [["ChangesInCash"], "", "int"],
+		"OperatingCashFlow": [["OperatingCashFlow"], "", "int"],
+		"CapitalExpenditure": [["CapitalExpenditure"], "", "int"],
+		"FreeCashFlow": [["FreeCashFlow"], "", "int"]
+	},
+	"static_3": {
+		"CFGrowth": [["OperatingCashFlow"], "change", "float"],
+		"CXChange":  [["CapitalExpenditure"], "change", "float"],
+		"FCFGrowth":  [["FreeCashFlow"], "change", "float"],
+		"FCFMargin": [["FreeCashFlow", "OperatingCashFlow"], "divide", "float"]
+	}
+}
