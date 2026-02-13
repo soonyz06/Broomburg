@@ -6,7 +6,6 @@ from dash import Output, Input
 app = dash.Dash(__name__, suppress_callback_exceptions=True)
 RESULT_CACHE = {}
 
-# (Keep your app.index_string exactly as you have it)
 app.index_string = '''
 <!DOCTYPE html>
 <html>
