@@ -38,7 +38,7 @@ def log_df(df, name, verbose=2):
     if df is None or verbose==0:
         return
     if verbose >=2:
-        print(f"\n[INFO]{name}: {list(df['symbol'].unique())}")
+        print(f"\n[INFO]{name}: {len(list(df['symbol'].unique()))}")
     else:
         print(f"\n[INFO]{name}")
     print(df.head(3))

@@ -1,12 +1,19 @@
-import dash
-from dash import html, Input, Output, State, Patch, ALL
-import uuid
-import json
 from src.ui.registry_setup import registry
 from src.ui.layout import USER_STYLE, AI_STYLE
+import json
+import uuid
+import dash
+from dash import html, dcc, Input, Output, State, ALL, MATCH, Patch
 
 def register_callbacks(app, RESULT_CACHE):
-    @app.callback(Output("sidebar-state", "data"), Input("btn-expand", "n_clicks"), State("sidebar-state", "data"), prevent_initial_call=True)
+    
+    # --- 1. SIDEBAR & SESSION CALLBACKS ---
+    @app.callback(
+        Output("sidebar-state", "data"), 
+        Input("btn-expand", "n_clicks"), 
+        State("sidebar-state", "data"), 
+        prevent_initial_call=True
+    )
     def toggle_sidebar(n, state): return not state
 
     @app.callback(
@@ -93,8 +100,6 @@ def register_callbacks(app, RESULT_CACHE):
                         content = RESULT_CACHE.get(f"{new_id}_{i}", html.Div("..."))
                         rebuild.extend([html.Div(msg, style=USER_STYLE), html.Div(content, style=AI_STYLE)])
                     return sessions, new_id, "", rebuild, "➤"
-                else:
-                    p = Patch(); p.append(html.Div(prompt, style=USER_STYLE)); p.append(html.Div(f"Invalid tab {idx}", style={**AI_STYLE, "color": "orange"})); return sessions, active_id, "", p, "➤"
             except: pass
 
         if not active_id: active_id = str(uuid.uuid4())
@@ -121,3 +126,109 @@ def register_callbacks(app, RESULT_CACHE):
         content, _ = registry.execute(session['messages'][-1])
         RESULT_CACHE[cache_key] = content
         p = Patch(); del p[-1]; p.append(html.Div(content, style=AI_STYLE)); return p, "➤"
+
+    # --- 2. NEWS FEED NAVIGATION (CLIENTSIDE ONLY) ---
+    app.clientside_callback(
+        """
+        function(nav_id) {
+            // 1. Safety check: Ensure nav_id exists and has an index
+            if (!nav_id || nav_id.index === undefined) return window.dash_clientside.no_update;
+
+            const instanceId = nav_id.index;
+            // Escape the index for the selector if it contains special characters
+            const container = document.querySelector(`[id*='${instanceId}'][id*='n-container']`);
+            
+            if (!container) return window.dash_clientside.no_update;
+
+            // 2. Initialize tracking object on window
+            if (!window.n_initialized_instances) {
+                window.n_initialized_instances = {};
+            }
+
+            // 3. AUTO-SELECT LOGIC: Only runs once per instanceId
+            if (!window.n_initialized_instances[instanceId]) {
+                setTimeout(() => {
+                    const first = container.querySelector('.n-row');
+                    if (first) {
+                        first.focus();
+                        container.scrollTop = 0;
+                    }
+                }, 100);
+                window.n_initialized_instances[instanceId] = true;
+            }
+
+            // 4. Navigation logic (Local to this container)
+            container.onkeydown = function(e) {
+                const active = document.activeElement;
+                if (!active || !active.classList.contains('n-row') || !container.contains(active)) return;
+
+                const thead = container.querySelector('thead');
+                const hH = thead ? thead.offsetHeight : 0;
+                let target = null;
+
+                if (e.key === 'ArrowDown') { 
+                    e.preventDefault(); 
+                    target = active.nextElementSibling; 
+                } 
+                else if (e.key === 'ArrowUp') { 
+                    e.preventDefault(); 
+                    target = active.previousElementSibling; 
+                }
+
+                if (target && target.classList.contains('n-row')) {
+                    target.focus();
+                    const cR = container.getBoundingClientRect();
+                    const tR = target.getBoundingClientRect();
+                    if (tR.bottom > cR.bottom || tR.top < (cR.top + hH)) {
+                        container.scrollTop = (target.offsetTop - hH);
+                    }
+                }
+
+                if (e.key === 'Enter') {
+                    const url = active.getAttribute('data-url');
+                    if (url && url.startsWith('http')) window.open(url, '_blank');
+                }
+            };
+
+            // 5. Global Style Injection
+            if (!window.n_style_added) {
+                const s = document.createElement('style');
+                s.innerHTML = `
+                    .n-row:focus { background-color: #2a2a2a !important; border-left: 5px solid #00ff00 !important; outline: none; } 
+                    .n-row:hover { background-color: #222; cursor: pointer; }
+                `;
+                document.head.appendChild(s);
+                window.n_style_added = true;
+            }
+
+            return `news-init-${instanceId}`; // Return a string instead of empty
+        }
+        """,
+        Output({'type': 'n-nav-init', 'index': MATCH}, 'title'),
+        Input({'type': 'n-nav-init', 'index': MATCH}, 'id')
+    )
+
+    app.clientside_callback(
+        """
+        function(isLight, toggle_id) {
+            const uid = toggle_id.index;
+            const bgColor = isLight ? "#FFFFFF" : "#4A4A4A";
+            const textColor = isLight ? "#000000" : "#FFFFFF";
+
+            // Manually find every element associated with this UID
+            const boxes = document.getElementsByClassName('scroll-area-' + uid);
+            const texts = document.getElementsByClassName('text-div-' + uid);
+            const label = document.getElementById('label-' + uid);
+
+            for (let b of boxes) { b.style.backgroundColor = bgColor; }
+            for (let t of texts) { t.style.color = textColor; }
+            if (label) { label.style.color = isLight ? "#000000" : "#FFFFFF"; }
+
+            return ""; 
+        }
+        """,
+        Output({"type": "sec-store", "index": MATCH}, "data"),
+        Input({"type": "sec-toggle", "index": MATCH}, "checked"),
+        State({"type": "sec-toggle", "index": MATCH}, "id"),
+        prevent_initial_call=True
+    )

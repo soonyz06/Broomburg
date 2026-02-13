@@ -22,18 +22,30 @@ class EdgarToolsAPI:
             "registration": ["S-1"],
             "proxy": ["DEF 14A"]
             }
-        
-    def fetch_filings(self, symbol, forms=["10-K", "20-F"], startDate="2024-01-01"):
-        print(f"[INFO]Fetching {symbol}: {startDate}")
+    def fetch_filings(self, symbol, forms=["10-K", "20-F"], startdate=None, enddate=None):
         time.sleep(self._sleep_s)
+        if not isinstance(forms, list): 
+            forms = [forms]
+        forms = [f.upper() for f in forms]
+
+        if startdate and enddate:
+            search_date = f"{startdate}:{enddate}"
+        elif startdate:
+            search_date = f"{startdate}:"
+        elif enddate:
+            search_date = f":{enddate}"
+        else:
+            search_date = None 
+
+        print(f"[INFO]Fetching {symbol}: {search_date}")
         company = Company(symbol) 
         filings = company.get_filings( #1 HTTP request per symbol (json containing every filing, regardless of date)
-            form=[f.upper() for f in forms],
-            filing_date=f"{startDate}:", 
+            form=forms,
+            filing_date=search_date, 
             amendments=False
         ) 
         return filings #pseudo symbol
-    
+
     def open_filing(self, filings):
         time.sleep(self._sleep_s)
         latest_filing = filings.latest().open()

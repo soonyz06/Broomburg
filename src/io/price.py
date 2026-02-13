@@ -3,12 +3,14 @@ import polars as pl
 import time
 import datetime
 import numpy as np
+import requests
+import io
 
 from tiingo import TiingoClient
 
-from src.io.fetch import validate_date
 from config.config import ASSET_CONFIGS
 from src.io.parquet import ParquetManager
+from src.io.yahooquery import YahooQueryAPI
 
 
 class TiingoAPI:
@@ -16,23 +18,25 @@ class TiingoAPI:
         #https://www.tiingo.com/documentation/end-of-day
         self._sleep_s = sleep_s
 
-    def _fetch_history(self, api_key, symbol, frequency, startDate): 
-        if startDate is not None and not validate_date(startDate):
+    def fetch_history(self, api_key, symbol, frequency, startDate): #directly yo polars
+        if startDate is None:
             return None
 
-        df_new = TiingoClient({'api_key': api_key}).get_dataframe(
-            symbol,
-            frequency=frequency,
-            startDate=startDate
-        )
-        df_new = pl.from_pandas(df_new.reset_index())
-        df_new = df_new.with_columns([
-            pl.col("date").dt.time().alias("time"),
-            pl.col("date").dt.date().alias("date"),
-            pl.lit(symbol).alias("symbol"),
-        ])
+        url = f"https://api.tiingo.com/tiingo/daily/{symbol}/prices"
+        params = {
+            'startDate': startDate,
+            'resampleFreq': frequency,
+            'format': 'csv',
+            'token': api_key
+        }
+        response = requests.get(url, params=params)
+        if response.status_code != 200 or not response.text.strip():
+            return None
+        df_new = pl.read_csv(io.BytesIO(response.content))
+
+        df_new = df_new.with_columns(pl.col("date").str.to_datetime())
         return df_new
-        
+    
         
 class PriceManager: 
     def __init__(self, sources, history_start):
@@ -51,13 +55,15 @@ class PriceManager:
         self._sources = sources
 
         self._tiingo = TiingoAPI(0.5)
+        self._yq = YahooQueryAPI(0.5, SIZE=10)
 
     def _load_batch(self, asset_type, frequency, batch_df, exclude_lazy, filedir, partition_map, refresh_threshold_days, REFRESH):
         assert batch_df.columns[0] == "symbol", "First column of each batch_df should be 'symbol'"
         lf, _ = self._reader.read_lazy(
             filedir.joinpath(*[f"{col}={val}" for col, val in partition_map.items()]),
             latest_by_identifiers=self._identifiers)
-        
+
+        success = 0
         batch_success = []
         batch_failed = []
         for row in batch_df.iter_rows(named=False):
@@ -67,22 +73,24 @@ class PriceManager:
 
             #SKIP -> Already Cached
             if not REFRESH:
-                df_old = self._reader.filter_lazy(lf, filters={"symbol": [symbol]}, COLLECT=True) 
-                exist_bool = not (df_old is None or df_old.is_empty())
-                if exist_bool and "date" in df_old.columns:
+                df_old = self._reader.filter_lazy(lf, filters={"symbol": [symbol]}, COLLECT=False) 
+                exist_bool = not (df_old is None or df_old.limit(1).collect().is_empty())
+                if exist_bool and "date" in df_old.collect_schema():
                     if refresh_threshold_days is None:
+                        success +=1
                         continue
+                    df_old = df_old.collect()
                     maxDate = df_old["date"].max()
                     startDate = maxDate.strftime("%Y-%m-%d") 
                     days_elapsed = (self._today - maxDate).days
                     if days_elapsed <= refresh_threshold_days:
+                        success +=1
                         continue
                 
             #FETCH -> Symbol
             for source, api_key in self._sources.items():
                 time.sleep(self._sleep_s)
                 df_new = None
-                
                 #Skip -> Already Failed
                 if exclude_lazy is not None: #filtered at source level, stored at asset_type level
                     IsInExclude = not self._reader.filter_lazy(
@@ -95,17 +103,34 @@ class PriceManager:
                 #FETCH -> Source
                 try:
                     print(f"[INFO]Fetching {symbol}: {startDate}")
-                    if source == "tiingo":                        
-                        df_new = self._tiingo._fetch_history(api_key, symbol, frequency, startDate)
+                    if source == "tiingo":
+                        df_new = self._tiingo.fetch_history(api_key, symbol, frequency, startDate)
+                    elif source == "yahooquery":
+                        df_new = self._yq.fetch_history(symbol, start=startDate, end=self._today, interval="1d")
+                        df_new = df_new.rename({"adjclose": "adjClose", "dividends": "divCash"})
                     else:
                         raise ValueError(f"Unknown source '{source}'")
                     
                     if df_new is None or df_new.is_empty():
                         raise ValueError(f"'{source}': is empty")
 
-                    df_new = df_new.with_columns(pl.lit(source).alias("source"))                                
+                    
+                    df_new = df_new.with_columns([
+                        pl.col("date")
+                          .cast(pl.Datetime("us"))         
+                          .dt.replace_time_zone("UTC")     
+                          .alias("date")
+                    ]).sort("date")
+                    df_new = df_new.with_columns([
+                        pl.col("date").dt.time().alias("time"),
+                        pl.col("date").dt.date().alias("date"),
+                        pl.lit(symbol).alias("symbol")
+                    ])
+                    df_new = df_new.select(["symbol", "date", "time", "close", "high", "low", "open", "volume", "adjClose", "divCash"])
+                    df_new = df_new.with_columns(pl.lit(source).alias("source"))
                     batch_success.append(df_new)
                     print(f"[INFO]Successfully saved {symbol}")
+                    success +=1
                     break #only uses the first valid source
                 except Exception as e:
                     print(f"[WARNING]Error fetching {symbol}: {e}")
@@ -115,7 +140,7 @@ class PriceManager:
         if batch_success:
             batch_success = pl.concat(batch_success)
             self._writer.save_parquet(filedir.joinpath(*[f"{col}={val}" for col, val in partition_map.items()]), batch_success, partition_cols=None)  #batch ~ reduce io ovehead from R/W opertions by holding in memory
-        return batch_failed
+        return success, batch_failed
 
     def load_history(self, asset_type, database, frequency, refresh_threshold_days=None, REFRESH=False):
         if database is None or database.is_empty():
@@ -147,15 +172,15 @@ class PriceManager:
                 print(f"[INFO]Batch {batch_idx}")
                 batch_idx +=1
                 batch_df = subdf.slice(offset, self._batch_size)
-                batch_failed = self._load_batch(**params, batch_df=batch_df, partition_map=partition_map) 
+                success, batch_failed = self._load_batch(**params, batch_df=batch_df, partition_map=partition_map) 
                 failed_calls.extend(batch_failed)
         del batch_df, batch_failed
         
-        success_rate = ((total_calls - len(failed_calls)) / total_calls) * 100 if total_calls>0 else np.nan
+        success_rate = ((success) / total_calls) * 100 if total_calls>0 else np.nan
         print(f"[INFO]Successfully fetched: {success_rate:.2f}% of symbols ({total_calls})")
 
         symbols = list(database["symbol"].unique())
-        lf, partition_cols = self._reader.read_lazy(filedir, latest_by_identifiers=self._identifiers) 
+        lf, partition_cols = self._reader.read_lazy(filedir, latest_by_identifiers=self._identifiers)
         output_df = self._reader.filter_lazy(lf, filters={"symbol": symbols}, COLLECT=True)
         
         failed_df = pl.DataFrame(failed_calls) if failed_calls else None
@@ -164,9 +189,16 @@ class PriceManager:
 
     def compact_job(self, asset_type, frequency): 
         filedir = self._basepath / asset_type / frequency #assumes same schema
-        self._writer.compact_job(filedir)
+        lf, partition_cols = self._reader.read_lazy(filedir, latest_by_identifiers=None)
+        if lf is None or lf.limit(1).collect().is_empty(): return self
+        df = lf.collect()
+        if df.is_empty(): return self
+        df = df.select(["symbol", "date", "time", "close", "high", "low", "open", "volume", "adjClose", "divCash", "source", "timestamp"]+partition_cols)
+        ts = datetime.datetime.now(datetime.timezone.utc)      
+        self._writer._clear_folder(ts, filedir) 
+        self._writer.save_parquet(filedir, df, partition_cols)
+        self._writer._cleanup_backups(max_age_hours=24)
         return self
 
-
-
+  
     

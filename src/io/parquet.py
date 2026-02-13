@@ -21,7 +21,7 @@ def synch_gcs():
     log_info("Initialise GCS", t0)
     return gcspath 
 
-class ParquetManager:
+class ParquetManager: ##minimise io and collect()
     def __init__(self, max_file_size=512*1024*1024, max_rg_size=128*1024*1024, batch_size=100_000):
         self._MAX_FILE_SIZE = max_file_size
         self._MAX_RG_SIZE = max_rg_size
@@ -185,16 +185,6 @@ class ParquetManager:
             self._save_subtable(subdir, subdf, _BACKUP=_BACKUP)
         return self
 
-    def compact_job(self, filedir): #merging and deduplication 
-        lf, partition_cols = self.read_lazy(filedir, latest_by_identifiers=None) #None -> versioning
-        ts = datetime.datetime.now(datetime.timezone.utc) 
-        self._cleanup_backups(max_age_hours=24)
-        if lf is None or lf.limit(1).collect().is_empty(): return self
-        df = lf.collect()
-        self._clear_folder(ts, filedir) 
-        self.save_parquet(filedir, df, partition_cols) #holds df in memory, peforms R/W operations in batches to reduce io overhead
-        return self
-
     def filter_lazy(self, lf, filters=None, inclusive=True, COLLECT=False): #in isolation, aggeragate -> join (semi, anti)
         if lf is None:
             return None
@@ -208,7 +198,8 @@ class ParquetManager:
             if val is None:
                 continue
             val = val if isinstance(val, list) else [val]
-            lf = lf.filter(pl.col(key).is_in(val)) if inclusive else lf.filter(pl.col(key).is_in(val).not_())            
+            
+            lf = lf.filter(pl.col(key).is_in(val)) if inclusive else lf.filter(pl.col(key).is_in(val).not_())
         return lf.collect() if COLLECT else lf
 
     def sample_df(self, df, sampling_rate, seed=42):

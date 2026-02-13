@@ -15,7 +15,7 @@ class DatabaseManager:
         self._writer = ParquetManager()
         self._reader = ParquetManager()
         
-    def fetch_database(self, asset_type, filters=None, limit=None, REFRESH=False, COLLECT=False):
+    def fetch_database(self, asset_type, filters=None, REFRESH=False):
         if asset_type not in self._config:
             raise ValueError(f"Asset type '{asset_type}' not supported.")
         config = self._config[asset_type]
@@ -27,11 +27,11 @@ class DatabaseManager:
             lf, partition_cols = self._reader.read_lazy(filedir, latest_by_identifiers=self._identifiers)
             if lf is not None:
                 lf = lf.select(selected_columns)
-                lf = lf.with_columns([pl.col(c).str.replace_all(" ", "_").str.replace_all(r"[^a-zA-Z0-9._-]", "").str.to_lowercase()
+                lf = lf.with_columns([pl.col(c).str.replace_all(" ", "_").str.to_lowercase() #.str.replace_all(r"[^a-zA-Z0-9._-]", "")
                                       for c in [s for s in selected_columns if s != "symbol"]])
                 lf = self._reader.filter_lazy(lf, filters=filters, COLLECT=False)
-                lf = lf.unique(subset=self._identifiers, maintain_order=True).limit(limit)
-                return lf.collect() if COLLECT else lf
+                lf = lf.unique(subset=self._identifiers, maintain_order=True)
+                return lf
 
         #FETCH -> Asset Type
         df = pl.from_pandas(config["fetcher"]().reset_index())
@@ -39,40 +39,14 @@ class DatabaseManager:
         df_final = df_final.with_columns(pl.lit("fd").alias("source"))
         self._writer.save_parquet(filedir, df_final, partition_cols=None)
         lf = df_final.lazy()
-        lf = lf.with_columns([pl.col(c).str.replace_all(" ", "_").str.replace_all(r"[^a-zA-Z0-9._-]", "").str.to_lowercase()
+        lf = lf.with_columns([pl.col(c).str.replace_all(" ", "_").str.to_lowercase() #.str.replace_all(r"[^a-zA-Z0-9._-]", "").
                                       for c in [s for s in selected_columns if s != "symbol"]])
         lf = self._reader.filter_lazy(lf, filters=filters, COLLECT=False)
-        lf = lf.unique(subset=self._identifiers, maintain_order=True).limit(limit)
-        return lf.collect() if COLLECT else lf
+        lf = lf.unique(subset=self._identifiers, maintain_order=True)
+        return lf
 
-    def filter_excludes(self, lf, asset_type, filters=None, limit=None, COLLECT=False):
-        if isinstance(lf, pl.DataFrame):
-            lf = lf.lazy()
-        assert isinstance(lf, pl.LazyFrame), "lf should be a LazyFrame"
-        if filters is None: filters = {"asset_type": asset_type}
-
-        #UNION Excludes
-        exclude_folders = sorted([f for f in self._basepath.parent.glob("*/exclude") if f.is_dir()])
-        dfs = [self._reader.read_lazy(f , latest_by_identifiers=self._identifiers)[0] for f in exclude_folders]
-        inner_dfs = [d.select(self._identifiers+["asset_type", "error", "source", "timestamp"]) for d in dfs if d is not None]
-        exclude_lazy = pl.concat(inner_dfs) if inner_dfs else None
-        exclude_lazy = self._reader.filter_lazy(exclude_lazy, filters=filters, inclusive=True) #filter 
-        if exclude_lazy is None:                
-            lf = lf.limit(limit)
-            return lf.collect() if COLLECT else lf, None
-
-        #FILTER BY Excludes
-        lf = lf.join(exclude_lazy.select(self._identifiers), on="symbol", how="anti")
-        lf = lf.limit(limit)
-        return lf.collect() if COLLECT else lf, exclude_lazy.collect() if COLLECT else exclude_lazy
-
-    def equity_filter(self, lf, asset_type, COLLECT=False):
+    def equity_filter(self, lf, asset_type):
         if asset_type != "equities":
-            return lf.collect() if COLLECT else lf
-        _size_map = {'Mega Cap': 0, 'Large Cap': 1, 'Mid Cap': 2, 'Small Cap': 3, 'Micro Cap': 4, 'Nano Cap': 5, None: 6}
-        lf = lf.with_columns(pl.col("market_cap").replace(_size_map).alias("size")).sort(["size", "symbol"], nulls_last=True).drop("size")
+            return lf
         lf = lf.filter(~pl.col("symbol").str.contains(r"[^A-Za-z]"))
-        return lf.collect() if COLLECT else lf
-
-
-    
+        return lf

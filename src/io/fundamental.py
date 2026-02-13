@@ -7,11 +7,11 @@ import numpy as np
 from config.config import ASSET_CONFIGS
 from src.io.parquet import ParquetManager
 from src.io.price import PriceManager
-from src.io.yq import YahooQueryAPI
+from src.io.yahooquery import YahooQueryAPI
 
 
 class FundamentalManager: 
-    def __init__(self, sources, history_start, pm: PriceManager):
+    def __init__(self, sources, history_start):
         self._basepath = Path.cwd() / "data" / "raw" / "fundamentals" 
         self._basepath.mkdir(parents=True, exist_ok=True)
         self._history_start = history_start
@@ -25,7 +25,6 @@ class FundamentalManager:
         self._writer = ParquetManager()
         self._reader = ParquetManager()
         self._sources = sources
-        self._pm = pm
 
         self._yq = YahooQueryAPI(0.5, SIZE=10)
 
@@ -34,7 +33,8 @@ class FundamentalManager:
         lf, _ = self._reader.read_lazy(
             filedir.joinpath(*[f"{col}={val}" for col, val in partition_map.items()]),
             latest_by_identifiers=self._identifiers)
-        
+
+        success = 0
         batch_success = []
         batch_failed = []
         missing_rows = []
@@ -45,18 +45,21 @@ class FundamentalManager:
 
             #SKIP -> Already Cached
             if not REFRESH:
-                df_old = self._reader.filter_lazy(lf, filters={"symbol": [symbol]}, COLLECT=True) 
-                exist_bool = not (df_old is None or df_old.is_empty())
-                if exist_bool and "date" in df_old.columns:
+                df_old = self._reader.filter_lazy(lf, filters={"symbol": [symbol]}, COLLECT=False) 
+                exist_bool = not (df_old is None or df_old.limit(1).collect().is_empty())
+                if exist_bool and "date" in df_old.collect_schema():
                     if refresh_threshold_days is None:
+                        success += 1
                         continue
+                    df_old = df_old.collect()
                     maxDate = df_old["date"].max()
                     startDate = maxDate.strftime("%Y-%m-%d") 
                     days_elapsed = (self._today - maxDate).days
                     if days_elapsed <= refresh_threshold_days:
+                        success += 1
                         continue
                 
-            #FETCH -> Symbol
+            #LOG -> Symbol
             for source, api_key in self._sources.items():
                 time.sleep(self._sleep_s)
                 df_new = None
@@ -72,16 +75,13 @@ class FundamentalManager:
 
                 #LOG -> To fetch
                 missing_rows.append(row)
+                success +=1
                 break #1 source only
-
+            
         if not missing_rows:
-            return batch_failed
+            return success, batch_failed
 
         #FETCH
-        missing_database = pl.DataFrame(missing_rows, schema=batch_df.columns, orient="row")
-        history, failed_df = self._pm.load_history(asset_type, missing_database, frequency="daily", refresh_threshold_days=7, REFRESH=False)
-        history = history.select(self._identifiers+["close", "volume"])
-
         source = "yahooquery"
         missing_symbols = [row[0] for row in missing_rows]
         fundamentals, failed_symbols = self._yq.fetch_batch(missing_symbols, self._yq.get_combined_financials, params={"frequency": frequency}) #sorted and selected
@@ -91,13 +91,11 @@ class FundamentalManager:
             
         if fundamentals is None or fundamentals.is_empty():
             print(f"[WARNING]'{source}': is empty")
-            return batch_failed
-        
+            return 0, batch_failed
+
         fundamentals = fundamentals.with_columns(pl.lit(source).alias("source"))
-        fundamentals = fundamentals.join_asof(history, on="date", by="symbol", strategy="backward", check_sortedness=False)
-        fundamentals = fundamentals.with_columns((pl.col("close")*pl.col("DilutedAverageShares")).alias("MC"))
         self._writer.save_parquet(filedir.joinpath(*[f"{col}={val}" for col, val in partition_map.items()]), fundamentals, partition_cols=None)
-        return batch_failed
+        return success-len(batch_failed), batch_failed
         
     def load_fundamentals(self, asset_type, database, frequency, refresh_threshold_days=None, REFRESH=False):
         if database is None or database.is_empty():
@@ -129,15 +127,15 @@ class FundamentalManager:
                 print(f"[INFO]Batch {batch_idx}")
                 batch_idx +=1
                 batch_df = subdf.slice(offset, self._batch_size)
-                batch_failed = self._load_batch(**params, batch_df=batch_df, partition_map=partition_map) 
+                success, batch_failed = self._load_batch(**params, batch_df=batch_df, partition_map=partition_map) 
                 failed_calls.extend(batch_failed)
         del batch_df, batch_failed
         
-        success_rate = ((total_calls - len(failed_calls)) / total_calls) * 100 if total_calls>0 else np.nan
+        success_rate = (success / total_calls) * 100 if total_calls>0 else np.nan
         print(f"[INFO]Successfully fetched: {success_rate:.2f}% of symbols ({total_calls})")
 
         symbols = list(database["symbol"].unique())
-        lf, partition_cols = self._reader.read_lazy(filedir, latest_by_identifiers=self._identifiers) 
+        lf, partition_cols = self._reader.read_lazy(filedir, latest_by_identifiers=self._identifiers)
         output_df = self._reader.filter_lazy(lf, filters={"symbol": symbols}, COLLECT=True)
         
         failed_df = pl.DataFrame(failed_calls) if failed_calls else None
@@ -145,8 +143,15 @@ class FundamentalManager:
         return output_df, failed_df
 
     def compact_job(self, asset_type, frequency): 
-        filedir = self._basepath / asset_type / frequency 
-        self._writer.compact_job(filedir)
+        filedir = self._basepath / asset_type / frequency #assumes same schema
+        lf, partition_cols = self._reader.read_lazy(filedir, latest_by_identifiers=None)
+        if lf is None or lf.limit(1).collect().is_empty(): return self
+        df = lf.collect()
+        if df.is_empty(): return self
+        ts = datetime.datetime.now(datetime.timezone.utc)
+        self._writer._clear_folder(ts, filedir) 
+        self._writer.save_parquet(filedir, df, partition_cols)
+        self._writer._cleanup_backups(max_age_hours=24)
         return self
 
 
