@@ -3,38 +3,61 @@
 		"TangibleAssets": [["Inventory", "NetPPE"], "sum", "int"],
 		"TotalDebt": [["CurrentDebtAndCapitalLeaseObligation", 	"LongTermDebtAndCapitalLeaseObligation"], "sum", "int"],
 		"NetDebt": [["TotalDebt", "CashCashEquivalentsAndShortTermInvestments"], "diff", "int"],
-		"Mezzaine": [["MinorityInterest", "PreferredStock"], "sum", "int"],
 		"InvestedCapital": [["TotalEquityGrossMinorityInterest", "NetDebt"], "sum", "int"],
 		"NCAV": [["CurrentAssets", "TotalLiabilitiesNetMinorityInterest"], "diff", "int"],
-		"CapitalEmployed": [["TotalAssets", "CurrentLiabilities"], "diff", "int"],
-		"NWC": [["CurrentAssets", "CurrentLiabilities"], "diff", "int"]
+
+		"OtherCurrentAssets": [["CurrentAssets", "CashCashEquivalentsAndShortTermInvestments", "AccountsReceivable", "Inventory"], "diff", "int"],
+		"OtherAssets": [["TotalNonCurrentAssets", "NetPPE", "Goodwill"], "diff", "int"],
+		"OtherCurrentLiabilities": [["CurrentLiabilities", "AccountsPayable", "CurrentDebtAndCapitalLeaseObligation"], "diff", "int"],
+		"OtherLiabilities": [["TotalNonCurrentLiabilitiesNetMinorityInterest", "LongTermDebtAndCapitalLeaseObligation"], "diff", "int"],
+		"AccumulatedOtherChanges": [["StockholdersEquity", "AdditionalPaidInCapital", "RetainedEarnings"], "diff", "int"],
+		"Non-ControllingInterest": [["TotalEquityGrossMinorityInterest", "StockholdersEquity"], "diff", "int"]
 	},
-	"static_2_hidden": {
-		"NetDebtFloored": [["NetDebt", 0], "max", "int"]
-	},
-	"static_3": {
-		"TotalAssets": [["TotalAssets"], "", "int"],
-		"CurrentAssets": [["CurrentAssets"], "", "int"],
+	"static_2": {
+		
+		
 		"CashCashEquivalentsAndShortTermInvestments": [["CashCashEquivalentsAndShortTermInvestments"], "", "int"],
+		"AccountsReceivable": [["AccountsReceivable"], "", "int"],
 		"Inventory": [["Inventory"], "", "int"],
-		"TotalNonCurrentAssets": [["TotalNonCurrentAssets"], "", "int"],
+		"OtherCurrentAssets": [["OtherCurrentAssets"], "", "int"],
+		"CurrentAssets": [["CurrentAssets"], "", "int"],
+
 		"NetPPE": [["NetPPE"], "", "int"],
-		"TotalLiabilitiesNetMinorityInterest": [["TotalLiabilitiesNetMinorityInterest"], "", "int"],
-		"CurrentLiabilities": [["CurrentLiabilities"], "", "int"],
+		"Goodwill": [["Goodwill"], "", "int"],
+		"OtherAssets": [["OtherAssets"], "", "int"],
+		"TotalNonCurrentAssets": [["TotalNonCurrentAssets"], "", "int"],
+
+		"TotalAssets": [["TotalAssets"], "", "int"],
+
+
+		"AccountsPayable": [["AccountsPayable"], "", "int"],
 		"CurrentDebtAndCapitalLeaseObligation": [["CurrentDebtAndCapitalLeaseObligation"], "", "int"],
-		"TotalNonCurrentLiabilitiesNetMinorityInterest": [["TotalNonCurrentLiabilitiesNetMinorityInterest"], "", "int"],
+		"OtherCurrentLiabilities": [["OtherCurrentLiabilities"], "", "int"],
+		"CurrentLiabilities": [["CurrentLiabilities"], "", "int"],
+	
 		"LongTermDebtAndCapitalLeaseObligation": [["LongTermDebtAndCapitalLeaseObligation"], "", "int"],
-		"TotalEquityGrossMinorityInterest": [["TotalEquityGrossMinorityInterest"], "", "int"],
-		"CommonStockEquity": [["CommonStockEquity"], "", "int"],
+		"OtherLiabilities": [["OtherLiabilities"], "", "int"],
+		"TotalNonCurrentLiabilitiesNetMinorityInterest": [["TotalNonCurrentLiabilitiesNetMinorityInterest"], "", "int"],
+
+		"TotalLiabilitiesNetMinorityInterest": [["TotalLiabilitiesNetMinorityInterest"], "", "int"],
+		
+		
+		"AdditionalPaidInCapital": [["AdditionalPaidInCapital"], "", "int"],
 		"RetainedEarnings": [["RetainedEarnings"], "", "int"],
+		"AccumulatedOtherChanges": [["AccumulatedOtherChanges"], "", "int"],
+		"StockholdersEquity": [["StockholdersEquity"], "", "int"],
+		"Non-ControllingInterest": [["Non-ControllingInterest"], "", "int"],
+		"TotalEquityGrossMinorityInterest": [["TotalEquityGrossMinorityInterest"], "", "int"],
+		
+		"CommonStockEquity": [["CommonStockEquity"], "", "int"],
+		"TotalDebt": [["TotalDebt"], "", "int"],
 		"NetDebt": [["NetDebt"], "", "int"],
 		"TangibleAssets": [["TangibleAssets"], "", "int"],
-		"CapitalEmployed": [["CapitalEmployed"], "", "int"],
 		"InvestedCapital": [["InvestedCapital"], "", "int"],
 		"NCAV": [["NCAV"], "", "int"],
 		"Shares": [["OrdinarySharesNumber"], "", "int"]
 	},
-	"static_4": {
+	"static_3": {
 		"D_E": [["TotalDebt", "TotalEquityGrossMinorityInterest", [1, -1]], "divide", "float"], 
 		"AssetsGrowth": [["TotalAssets"], "change", "float"],
 		"TAGrowth": [["TangibleAssets"], "change", "float"],

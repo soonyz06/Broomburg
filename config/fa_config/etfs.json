@@ -1,0 +1,47 @@
+{
+  "indices": {
+    "VT": "Global Markets",
+    "VTI": "US Market",
+    "VXUS": "International Markets",
+    "VEA": "Developed Ex-US",
+    "VWO": "Emerging Markets",
+    "VGK": "Europe Developed Markets",
+    "VPL": "Pacific Developed Markets"
+  },
+  "countries": {
+    "SPY": "US Large-cap",
+    "MCHI": "China Equity",
+    "EWJ": "Japan Equity",
+    "EWU": "UK Equity",
+    "EWG": "Germany Equity",
+    "EWY": "Korea Equity",
+    "INDA": "India Equity",
+    "EWS": "Singapore Equity",
+    "EWM": "Malaysia Equity",
+    "EWA": "Australia Equity",
+    "UAE": "UAE Equity"
+  },
+  "factors": {
+    "VTV": "US Value",
+    "VUG": "US Growth",
+    "VFQY": "Quality Factor",
+    "VFMO": "Momentum Factor",
+    "VFMV": "Low Volatility",
+    "VBR": "Size",
+    "VFMF": "Multi-factor"
+  },
+  "alternatives": {
+    "VTG": "US Treasury",
+    "BND": "US Bond",
+    "BNDX": "International Bond",
+    "VNQ": "US Real Estate",
+    "VNQI": "Ex-US Real Estate",
+    "GLD": "Gold",
+    "SLV": "Silver",
+    "IBIT": "Bitcoin",
+    "FETH": "Ethereum",
+    "DBC": "Commodities",
+    "URA": "Uranium",
+    "REMX": "Rare Earth Metals"
+  }
+}

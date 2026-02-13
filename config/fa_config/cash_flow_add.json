@@ -1,15 +1,35 @@
 {
 	"static_1_hidden": {
-		"OtherNonCashAdj": [[ "CashFlowFromContinuingOperatingActivities", "NetIncome", "DepreciationAndAmortization" ], "diff", "int"]
+		"OtherAdj": [["CashFlowFromContinuingOperatingActivities", "NetIncome", "DepreciationAndAmortization", "ChangeInWorkingCapital"], "diff", "int"],
+		"OtherInvesting": [["CashFlowFromContinuingInvestingActivities", "PurchaseOfBusiness", "PurchaseOfInvestment", "SaleOfInvestment"], "diff", "int"],
+		"OtherFinancing": [["CashFlowFromContinuingFinancingActivities", "RepaymentOfDebt", "RepurchaseOfCapitalStock", "CashDividendsPaid", "CommonStockIssuance"], "diff", "int"],
+		"SupplementaryAdj": [["EndCashPosition", "ChangesInCash", "BeginningCashPosition"], "diff", "int"]
 	},
 	"static_2": {
 		"NetIncome": [["NetIncome"], "", "int"],
 		"DepreciationAndAmortization": [["DepreciationAndAmortization"], "", "int"],
-		"OtherNonCashAdj": [["OtherNonCashAdj"], "", "int"],
+		"ChangeInWorkingCapital": [["ChangeInWorkingCapital"], "", "int"],
+		"OtherAdj": [["OtherAdj"], "", "int"],
 		"CashFlowFromContinuingOperatingActivities": [["CashFlowFromContinuingOperatingActivities"], "", "int"],
+
+		"PurchaseOfBusiness": [["PurchaseOfBusiness"], "", "int"],
+		"PurchaseOfInvestment": [["PurchaseOfInvestment"], "", "int"],
+		"SaleOfInvestment": [["SaleOfInvestment"], "", "int"],
+		"OtherInvesting": [["OtherInvesting"], "", "int"],
 		"CashFlowFromContinuingInvestingActivities": [["CashFlowFromContinuingInvestingActivities"], "", "int"],
+
+		"RepaymentOfDebt": [["RepaymentOfDebt"], "", "int"],
+		"RepurchaseOfCapitalStock": [["RepurchaseOfCapitalStock"], "", "int"],
+		"CashDividendsPaid": [["CashDividendsPaid"], "", "int"],
+		"CommonStockIssuance": [["CommonStockIssuance"], "", "int"],
+		"OtherFinancing": [["OtherFinancing"], "", "int"],
 		"CashFlowFromContinuingFinancingActivities": [["CashFlowFromContinuingFinancingActivities"], "", "int"],
+			
 		"ChangesInCash": [["ChangesInCash"], "", "int"],
+		"SupplementaryAdj": [["SupplementaryAdj"], "", "int"],
+		"BeginningCashPosition": [["BeginningCashPosition"], "", "int"],
+		"EndCashPosition": [["EndCashPosition"], "", "int"],
+		
 		"OperatingCashFlow": [["OperatingCashFlow"], "", "int"],
 		"CapitalExpenditure": [["CapitalExpenditure"], "", "int"],
 		"FreeCashFlow": [["FreeCashFlow"], "", "int"]

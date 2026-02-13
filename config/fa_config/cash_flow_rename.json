@@ -1,12 +1,9 @@
 {
 	"date": "date",
-	"NetIncome": "Net Income",
 	"DepreciationAndAmortization": "D&A",
-	"OtherNonCashAdj": "Non-Cash Adj",
-	"CashFlowFromContinuingOperatingActivities": "CFFO",
-	"CashFlowFromContinuingInvestingActivities": "CFFI",
-	"CashFlowFromContinuingFinancingActivities": "CFFF",
-	"ChangesInCash": "Changes In Cash",
+	"CashFlowFromContinuingOperatingActivities": "CFO",
+	"CashFlowFromContinuingInvestingActivities": "CFI",
+	"CashFlowFromContinuingFinancingActivities": "CFF",
 	"OperatingCashFlow": "OCF",
 	"CapitalExpenditure": "CapEx",
 	"FreeCashFlow": "FCF"

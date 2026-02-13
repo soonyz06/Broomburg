@@ -38,8 +38,4 @@ ASSET_CONFIGS = {
     }
 }
 
-DATABASE_CONFIGS = {
-    "asset_type": "equities",
-    "filters": {"currency": ['usd'], "exchange": ['nms', 'nyq', 'ngm', 'ncm', 'ase', 'pcx', 'pnk'], "market_cap": ["mega_cap"]}
-}
 

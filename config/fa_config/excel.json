@@ -1,0 +1,46 @@
+{
+    "balance_sheet(a)": {
+        "Total Assets": ["Current Assets", "Non-Current Assets"],
+        "Total Liabilities": ["Current Liabilities", "Non-Current Liabilities"],
+        "Total Equity": ["Total Assets", "Total Liabilities"]
+    },
+    "income_statement(a)": {
+        "Gross Profit": ["Revenue", "COGS"],
+        "Operating Expense": ["SG&A", "R&D", "Others"],
+        "Operating Income": ["Gross Profit", "Operating Expense"],
+        "Pretax Income": ["Operating Income", "Net Interest", "Other Income"],
+        "Net Income": ["Pretax Income", "Taxes", "After-Tax Adj"],
+        "NI Common": ["Net Income", "Other Stockholders"],
+        "Rev Growth": ["D", "Revenue"],
+        "Gross Margin": ["/", "Gross Profit", "Revenue"],
+        "Op Margin": ["/", "Operating Income", "Revenue"],
+	"Net Margin": ["/", "NI Common", "Revenue"]
+    },
+    "cash_flow(a)": {
+        "CFFO": ["Net Income", "D&A", "Non-Cash Adj"],
+        "Changes In Cash": ["CFFO", "CFFI", "CFFF"],
+        "FCF": ["OCF", "CapEx"]
+    },
+    "balance_sheet(q)": {
+        "Total Assets": ["Current Assets", "Non-Current Assets"],
+        "Total Liabilities": ["Current Liabilities", "Non-Current Liabilities"],
+        "Total Equity": ["Total Assets", "Total Liabilities"]
+    },
+    "income_statement(q)": {
+        "Gross Profit": ["Revenue", "COGS"],
+        "Operating Expense": ["SG&A", "R&D", "Others"],
+        "Operating Income": ["Gross Profit", "Operating Expense"],
+        "Pretax Income": ["Operating Income", "Net Interest", "Other Income"],
+        "Net Income": ["Pretax Income", "Taxes", "After-Tax Adj"],
+        "NI Common": ["Net Income", "Other Stockholders"],
+        "Rev Growth": ["D", "Revenue"],
+        "Gross Margin": ["/", "Gross Profit", "Revenue"],
+        "Op Margin": ["/", "Operating Income", "Revenue"],
+	"Net Margin": ["/", "NI Common", "Revenue"]
+    },
+    "cash_flow(q)": {
+        "CFFO": ["Net Income", "D&A", "Non-Cash Adj"],
+        "Changes In Cash": ["CFFO", "CFFI", "CFFF"],
+        "FCF": ["OCF", "CapEx"]
+    }
+}
