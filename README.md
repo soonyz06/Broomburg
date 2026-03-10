@@ -33,7 +33,7 @@ proof of concept, so alot of stuff are scuffed and not refined
  ![commands](config/img/help.png)
  * Uses dash for most of it (vibe coded)
  * Registry pattern to parse and execute commands
- * Auto populates a [spreadsheet](data/output/fa_models) for DCF
+ * Able to auto populates [spreadsheets](data/output/fa_models) for DCF
  ![fa](config/img/fa.png)
  ![p](config/img/p.png)
  ![n](config/img/n.png)
