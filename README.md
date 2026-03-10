@@ -16,6 +16,7 @@ proof of concept, so alot of stuff are scuffed and not refined. alot of stuff ar
   - Time series: ADF, KPSS, ACF, PACF, etc
 * Feature
   - Feature processing: Imputation, winsor, normlisation, power transform, vector embeddings, etc
+  - Factors components: [multiples](config/fa_config/multiples_add.json) like EBIT/EV, Rev Growth, ROIC, Operating Margins, etc and [price_factors](config/fa_config/price_factor_add.json) like HML, UMD, Beta, IVOL, etc
 
  # Broomburg
  ![commands](config/img/help.png)
