@@ -1,4 +1,4 @@
-#PS proof of concept. most stuff is currently broken. some stuff are vibe-coded hence why they may look scuffed 
+proof of concept. most stuff are currently broken
 
 # Data Pipeline
 * Tabular data stored as parquet files using [PM](src/io/parquet.py)
@@ -18,7 +18,7 @@
 
  # Broomburg
  ![commands](config/help.png)
- * Uses dash for most of it
+ * Uses dash for most of it (vibe coded)
  * Registry pattern to parse and execute commands
 
 # Stuff
