@@ -1,4 +1,4 @@
-# model
+#PS proof of concept. most stuff is currently broken. some stuff are vibe-coded hence why they may look scuffed 
 
 # Data Pipeline
 * Tabular data stored as parquet files using [PM](src/io/parquet.py)
