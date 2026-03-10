@@ -38,6 +38,7 @@ proof of concept, so alot of stuff are scuffed and not refined
  ![p](config/img/p.png)
  ![n](config/img/n.png)
  ![txt](config/img/txt.png)
+- Potential for semantic chunking and storing in vector database for RAG and stuff
 
 
 
