@@ -163,6 +163,7 @@ class PriceManager:
         batch_idx = 0
         total_calls = len(database)
         failed_calls = []
+        success = 0
         print(f"\n[INFO]Fetching Historical Prices ({total_calls})")
         assert set(partition_cols).issubset(database.columns), "Partition cols should be present in the DataFrame"
         subtables = database.partition_by(partition_cols, as_dict=True)
@@ -172,7 +173,8 @@ class PriceManager:
                 print(f"[INFO]Batch {batch_idx}")
                 batch_idx +=1
                 batch_df = subdf.slice(offset, self._batch_size)
-                success, batch_failed = self._load_batch(**params, batch_df=batch_df, partition_map=partition_map) 
+                x, batch_failed = self._load_batch(**params, batch_df=batch_df, partition_map=partition_map)
+                success +=x
                 failed_calls.extend(batch_failed)
         del batch_df, batch_failed
         

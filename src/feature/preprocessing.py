@@ -5,7 +5,7 @@ import datetime
 
 from sklearn.model_selection import train_test_split
 
-from src.ml.feature.eda import display_nulls
+from src.feature.eda import display_nulls
 
 def get_reciprocal(x, eps=1e-8):
     return 1.0 / (x + eps)
@@ -194,7 +194,7 @@ def get_summary(df, symbols, dates):
     return df
 
 def get_transformed_data(rv, feat, dates, transform_fn, transformers, POOL=True):
-    feat["num"] = sorted(list(set(rv.columns) - set(feat["id"]+feat["cat"]+feat["dum"]+feat["target"])))
+    feat["num"] = sorted(list(set(rv.columns) - set(feat["id"]+feat["cat"]+feat["target"])))
     if not POOL: rv = regime_transform(rv, transform_fn, transformers)
     train_df, test_df = train_test_split(rv[rv["date"]!=dates[-1]], test_size=0.2, random_state=42, shuffle=True)
     val_df, test_df = train_test_split(test_df, test_size=0.5, random_state=42, shuffle=True)

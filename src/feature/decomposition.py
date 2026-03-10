@@ -172,8 +172,7 @@ def plot_network_2d(df, threshold=0.3, metric="cosine"):
     )
     nx.draw_networkx_labels(
         G, pos, font_size=8, font_weight="bold",
-        verticalalignment="center", horizontalalignment="center",
-        zorder=3  
+        verticalalignment="center", horizontalalignment="center",  
     )
     ax.margins(0.2)
     ax.set_title(f"{df.columns[0]} Network Graph ({metric} distance ≤ {threshold:.2f})")
@@ -317,7 +316,7 @@ class Custom_Decomposition:
         if labels is not None:
             df = df[df.iloc[:,0].isin(names)].reset_index(drop=True)
 
-        if n_dim >0 and <= 2:
+        if n_dim >0 and n_dim <= 2:
             plot_network_2d(df, threshold)
         elif n_dim == 3:
             plot_network_3d(df, threshold)

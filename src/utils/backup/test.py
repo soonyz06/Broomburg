@@ -64,7 +64,7 @@ transform_fn = [
         transformers["encoder"].transform(df, feat["cat"], feat["target"], FIT)
         .pipe(lambda d: transformers["scaler"].transform(d, sorted(list(set(d.columns) - set(feat["id"]+feat["cat"]+feat["dum"]+feat["target"]))), FIT))), "group_sets": []} 
 ]
-"""s
+"""
 
 
 datasets = get_transformed_data(rv, feat, dates, transform_fn, transformers, POOL=False)  

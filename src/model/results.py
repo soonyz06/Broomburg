@@ -5,7 +5,7 @@ import polars as pl
 import pandas as pd
 from sklearn.metrics import r2_score, mean_absolute_error, mean_squared_error, mean_squared_log_error, mean_absolute_percentage_error, average_precision_score
 from scipy.stats import kendalltau
-from sklearn.inspection import partial_dependencem permutation_importance
+from sklearn.inspection import partial_dependence, permutation_importance
 from PyALE import ale
 import shap
 

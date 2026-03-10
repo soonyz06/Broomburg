@@ -32,8 +32,11 @@ def build_mapping(train_df, cat_cols):
     return mappings, unk_indices
 
 def apply_mapping(df, mappings, unk_indices):
-    for col in mappings:
-        df[f"{col}_idx"] = df[col].map(lambda x: mappings[col].get(x, unk_indices[col]))
+    new_cols = pd.DataFrame({
+        f"{col}_idx": df[col].map(lambda x: mappings[col].get(x, unk_indices[col]))
+        for col in mappings
+    })
+    df = pd.concat([df, new_cols], axis=1)
     return df
         
 class EmbeddingModel(nn.Module):
@@ -43,7 +46,7 @@ class EmbeddingModel(nn.Module):
             nn.Embedding(cat_dim+1, emb_dim)
             for cat_dim, emb_dim in zip(cat_dims, emb_dims) 
         ])
-        self.dropout_emb = nn.Dropout(p=0.3)
+        self.emb_dropout = nn.Dropout(p=0.3)
         
         total_input_dim = sum(emb_dims) + num_dim
         #self.fc = nn.Linear(total_input_dim, 1)        
@@ -131,6 +134,7 @@ def learned_embedding(datasets, feat, params=None):
 
 def visualise_embeddings(lookup_dict, model, n_dim=3, threshold=0.3, metric="cosine", POOL=False):
     pooled_df = pd.DataFrame()
+    clusters = None
     for key, emb_df in lookup_dict.items(): #emb_df.columns = [label_key, emb_0, ..., emb_n]
         if emb_df.shape[1]-1 < n_dim: #num_PC > emb_dim
             continue
@@ -142,7 +146,7 @@ def visualise_embeddings(lookup_dict, model, n_dim=3, threshold=0.3, metric="cos
         else:
             clusters = pca.network_plot(n_dim=n_dim, threshold=threshold, metric=metric)
     if POOL and not pooled_df.empty:
-        clusters = pca.network_plot(n_dim=n_dim, df=pooled_df, threshold=threshold, metric=metric)
+        clusters = pca.network_plot(n_dim=n_dim, label_df=pooled_df, threshold=threshold, metric=metric)
     return clusters
 
 
