@@ -1,21 +1,9 @@
 proof of concept, so alot of stuff are scuffed and not refined. alot of stuff are currently broken :)
 
-# Things
-* Factor Models
-  - R_{i,t}  -R_{f,t} = a_{i} + B_{i,1}F_{1,t} + ... + B_{i,k}F_{k,t} + e_{i,t} (factor loading)
-  - regression of asset returns on factor returns (time-series regression)
-  - R_{i,t} - R_{f,t} = λ_{0,t} + λ_{1,t}B_{i,1} + λ_{k,t}B_{k,1} + n_{i,t} (risk premia)
-  - regression of asset returns on factors characteristics (cross-sectional regression)
-  - B = Cov/Var is equivalent to a specific case of OLS
-  - Z-normalised scores can also be used proxy for factor exposures (B)
-  - Used in risk models and hedging in order to isolate idio alpha and remove unwanted exposures
-  - Used in performance attribution to see how much of the returns are from exposure to systematic factors vs resid (alpha + error)
-* Risk
-  - [Vol](src/utils/risk.py): Close to close, yang zhang and garch  
     
 # Data Pipeline
 * Tabular data stored as parquet files using [PM](src/io/parquet.py)
-  - Batch I/O operations with constraints on max row group & file sizes 
+  - Batch I/O operations 
   - Chunks written to new files each time + Scheduled Compact jobs 
   - Partitioning, versioning, backups, stores metadata(ts, source), etc
 * Data pulled from various sources
@@ -40,6 +28,19 @@ proof of concept, so alot of stuff are scuffed and not refined. alot of stuff ar
  ![txt](config/img/txt.png)
 - Potential for semantic chunking and storing in vector database for RAG and stuff
 
+
+# stuff
+* Factor Models
+  - R_{i,t}  -R_{f,t} = a_{i} + B_{i,1}F_{1,t} + ... + B_{i,k}F_{k,t} + e_{i,t} (factor loading)
+  - regression of asset returns on factor returns (time-series regression)
+  - R_{i,t} - R_{f,t} = λ_{0,t} + λ_{1,t}B_{i,1} + λ_{k,t}B_{k,1} + n_{i,t} (risk premia)
+  - regression of asset returns on factors characteristics (cross-sectional regression)
+  - B = Cov/Var is equivalent to a specific case of OLS
+  - Z-normalised scores can also be used proxy for factor exposures (B)
+  - Used in risk models and hedging in order to isolate idio alpha and remove unwanted exposures
+  - Used in performance attribution to see how much of the returns are from exposure to systematic factors vs resid (alpha + error)
+* Risk
+  - [Vol](src/utils/risk.py): Close to close, yang zhang and garch  
 
 
 
