@@ -18,7 +18,7 @@
 
  # Broomburg
  ![commands](config/help.png)
- * Uses dash for front-end and some back-end
+ * Uses dash for most of it
  * Registry pattern to parse and execute commands
 
 # Stuff
