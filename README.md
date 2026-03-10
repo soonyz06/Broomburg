@@ -1,4 +1,4 @@
-proof of concept, so alot of stuff are scuffed and not refined
+proof of concept, so alot of stuff are scuffed and not refined. alot of stuff are currently broken :)
 
 # Things
 * Factor Models
