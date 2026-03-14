@@ -1,20 +1,11 @@
-proof of concept, so alot of stuff are scuffed and not refined. alot of stuff are currently broken :)
+for testing and learning concept, so alot of stuff are scuffed (especially data arch). not finalised version
 
-    
-# Data Pipeline
-* Tabular data stored as parquet files using [PM](src/io/parquet.py)
-  - the i/o code is quite bad, gonna redo :)
-* Data pulled from various sources
-  - yahooquerry, tiingo, sec, rss, fred, alpha vantage, etc
- 
 # Data Analysis
 * [EDA](src/feature)
-  - Basic plots: Missing heatmap, histograms, qq, corr, pca, importances, shap, network graphs, etc
+  - Basic plots: Missing heatmap, histograms, qq, corr, boxplot
+  - More plots: PCA, importances, shap, network graphs, etc
   - OLS plots: Predicted vs Actual, Resid vs Fitted, qq plot, cook's distance, vif, etc
   - Time series: ADF, KPSS, ACF, PACF, etc
-* Feature
-  - Feature processing: Imputation, winsor, normlisation, power transform, vector embeddings, etc
-  - Factors components: [multiples](config/fa_config/multiples_add.json) like EBIT/EV, Rev Growth, ROIC, Operating Margins, etc and [price_factors](config/fa_config/price_factor_add.json) like HML, UMD, Beta, IVOL, etc
 
  # Broomburg
  ![commands](config/img/help.png)
