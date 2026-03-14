@@ -3,9 +3,7 @@ proof of concept, so alot of stuff are scuffed and not refined. alot of stuff ar
     
 # Data Pipeline
 * Tabular data stored as parquet files using [PM](src/io/parquet.py)
-  - Batch I/O operations 
-  - Chunks written to new files each time + Scheduled Compact jobs 
-  - Partitioning, versioning, backups, stores metadata(ts, source), etc
+- the i/o code is quite bad, gonna redo :)
 * Data pulled from various sources
   - yahooquerry, tiingo, sec, rss, fred, alpha vantage, etc
  
