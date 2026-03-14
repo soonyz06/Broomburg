@@ -1,4 +1,5 @@
-for testing and learning concept, so alot of stuff are scuffed (especially data arch). not finalised version
+for testing and learning concepts, so alot of stuff are scuffed (especially data arch). not finalised version.   
+improved version of current data pipeline/arch [here](https://github.com/soonyz06/Barra)
 
 # Data Analysis
 * [EDA](src/feature)
