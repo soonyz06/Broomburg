@@ -7,10 +7,11 @@ improved version of current data pipeline/arch [here](https://github.com/soonyz0
   - More plots: PCA, importances, shap, network graphs, etc
   - OLS plots: Predicted vs Actual, Resid vs Fitted, qq plot, cook's distance, vif, etc
   - Time series: ADF, KPSS, ACF, PACF, etc
+* [Example](https://github.com/soonyz06/Broomburg_Prototype) from previous iteration. 
 
  # Broomburg
  ![commands](config/img/help.png)
- * Uses dash for most of it (vibe coded)
+ * Uses dash for web application (vibe coded cuz i aint learning webdev)
  * Registry pattern to parse and execute commands
  * Able to auto populate [spreadsheets](data/output/fa_models) for DCF
  ![fa](config/img/fa.png)
