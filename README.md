@@ -1,4 +1,4 @@
-for testing and learning concepts, so alot of stuff are scuffed (especially data architecture). not finalised version.   
+for me to test and learn concepts, so alot of stuff are scuffed    
 improved version of current data pipeline/architecture [here](https://github.com/soonyz06/Barra)
 
 # Data Analysis
