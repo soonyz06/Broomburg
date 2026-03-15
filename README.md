@@ -1,5 +1,5 @@
-for testing and learning concepts, so alot of stuff are scuffed (especially data arch). not finalised version.   
-improved version of current data pipeline/arch [here](https://github.com/soonyz06/Barra)
+for testing and learning concepts, so alot of stuff are scuffed (especially data architecture). not finalised version.   
+improved version of current data pipeline/architecture [here](https://github.com/soonyz06/Barra)
 
 # Data Analysis
 * [EDA](src/feature)
@@ -7,8 +7,8 @@ improved version of current data pipeline/arch [here](https://github.com/soonyz0
   - More plots: PCA, importances, shap, network graphs, etc
   - OLS plots: Predicted vs Actual, Resid vs Fitted, qq plot, cook's distance, vif, etc
   - Time series: ADF, KPSS, ACF, PACF, etc
-* [Example](https://github.com/soonyz06/Broomburg_Prototype) from previous iteration. 
-
+* Previous implementation [here](https://github.com/soonyz06/Broomburg_Prototype) 
+  
  # Broomburg
  ![commands](config/img/help.png)
  * Uses dash for web application (vibe coded cuz i aint learning webdev)
