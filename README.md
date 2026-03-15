@@ -20,20 +20,7 @@ improved version of current data pipeline/arch [here](https://github.com/soonyz0
  ![txt](config/img/txt.png)
 - Potential for semantic chunking and storing in vector database for RAG and stuff
 
-
-# stuff
-* Factor Models (R = BF + e)
-  Time-series Regression
-  - regression of asset returns on factor returns 
-  - used in estimating realized exposures and performance attribution
-    
-  Cross-sectional Regression
-  - regression of asset returns on exposures
-  - OLS: F = (B'B)^-1 B'R ≈ Factor-mimicking portfolios: F = WR
-  - used in estimating factor returns
- 
-  - Factor Risk Contribution = Signal exposure x std(F)
-* Risk
+# Risk
   - [Vol](src/utils/risk.py): Close to close, yang zhang and garch  
 
 
