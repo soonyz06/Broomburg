@@ -2,7 +2,7 @@ for me to test and learn concepts, so alot of stuff are scuffed,
 
 # Data Engineering
   - Planning to scrap and redo the entire thing
-  - Implementation of a prototype for an improved version of current [data architecture](https://github.com/soonyz06/Barra).  
+  - Implementation of a prototype for an improved version of current [data architecture](https://github.com/soonyz06/Factor_Model).  
 
 # Data Analysis
 * [EDA](src/feature)
