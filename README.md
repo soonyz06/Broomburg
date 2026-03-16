@@ -6,7 +6,7 @@ for me to test and learn concepts, so alot of stuff are scuffed, implementation 
   - More plots: PCA, importances, shap, network graphs, etc
   - OLS plots: Predicted vs Actual, Resid vs Fitted, qq plot, cook's distance, vif, etc
   - Time series: ADF, KPSS, ACF, PACF, etc
-* Previous implementation [here](https://github.com/soonyz06/Broomburg_Prototype) 
+* [Previous implementation](https://github.com/soonyz06/Broomburg_Prototype) 
   
  # Broomburg
  ![commands](config/img/help.png)
