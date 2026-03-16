@@ -1,4 +1,5 @@
-for me to test and learn concepts, so alot of stuff are scuffed, implementation of a prototype for an improved version of current data pipeline/architecture [here](https://github.com/soonyz06/Barra)
+for me to test and learn concepts, so alot of stuff are scuffed, implementation of a prototype for an improved version of current data pipeline/architecture [here](https://github.com/soonyz06/Barra).   
+*plan to scrap and redo the entire thing
 
 # Data Analysis
 * [EDA](src/feature)
