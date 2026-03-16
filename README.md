@@ -5,7 +5,7 @@ for me to test and learn concepts, so alot of stuff are scuffed,
   - Planning to scrap and redo the entire thing  
 
 # Data Analysis
-* [EDA](src/feature)
+* EDA
   - Basic plots: Missing heatmap, histograms, qq, corr, boxplot
   - More plots: PCA, importances, shap, network graphs, etc
   - OLS plots: Predicted vs Actual, Resid vs Fitted, qq plot, cook's distance, vif, etc
