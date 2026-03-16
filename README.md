@@ -1,7 +1,7 @@
 for me to test and learn concepts, so alot of stuff are scuffed, 
 
 # Data Engineering
-  - Polars for lazy, partitioning, batch I/O operations, versioning, compact job, schema enforcement, etc
+  - Polars: Lazy query plan, hive partitioning, batch I/O operations, file sizing, versioning, compact jobs, schema enforcement, etc
   - Planning to scrap and redo the entire thing  
 
 # Data Analysis
