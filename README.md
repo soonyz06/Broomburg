@@ -1,8 +1,8 @@
 for me to test and learn concepts, so alot of stuff are scuffed, 
 
 # Data Engineering
-  - Planning to scrap and redo the entire thing
-  - Implementation of a prototype for an improved version of current [data architecture](https://github.com/soonyz06/Factor_Model).  
+  - Polars for lazy, partitioning, batch I/O operations, versioning, compact job, schema enforcement, etc
+  - Planning to scrap and redo the entire thing  
 
 # Data Analysis
 * [EDA](src/feature)
