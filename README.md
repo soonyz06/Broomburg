@@ -2,7 +2,7 @@ for me to test and learn concepts, so alot of stuff are scuffed,
 
 # Data Engineering
   - Polars: Lazy query plan, hive partitioning, batch I/O operations, file sizing, versioning, compact jobs, schema enforcement, etc
-  - Potential improvements: Last updated+different logic for new and update, bloom filter, negative caching, write rename, binary search retry, never overwrite and unified logger. 
+  - Potential improvements: Last updated+different logic for new and update, bloom filter, negative caching, write-rename, binary search retry, never overwrite(w ts) and unified log. 
   - Planning to scrap and redo the entire thing
 # Data Analysis
 * EDA
