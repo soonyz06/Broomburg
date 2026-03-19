@@ -46,9 +46,13 @@ class Risk:
         vol = pl.DataFrame({"date": df_roll["date"], "vol": vol}).drop_nulls()
         return vol
 
-    def garch_vol(self, df):
+    def garch_vol(self, df): 
+        #conditional variance (h_t) = unconditional variance (w) + q ∑ a*past squared shicks (ε^2) + p ∑ b*past conditional variance (h_t)
+        #E[h_t] = sigma^2 =  w/(1-(a+b)), so ∑a + ∑b < 1 for it to be stationary (else no unconditional variance)
+        #QMLE using pseudo-correlation matrix
+        
         log_returns = df["log_returns"].to_numpy()
-        model = arch_model(log_returns, vol="GARCH", p=1, q=1, dist="t") #Univariate t-GARCH(1, 1)
+        model = arch_model(log_returns, vol="GARCH", p=1, q=1, dist="t") #Univariate t-GARCH(p=1, q=1) 
         res = model.fit(disp="off")
         forecast = res.forecast(horizon=1)
         vol = forecast.variance.iloc[-1, 0]**0.5
