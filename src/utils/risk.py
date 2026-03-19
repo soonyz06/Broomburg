@@ -33,9 +33,9 @@ class Risk:
 
         #fT - Before opening (opening jump as an unobservable continuous price movement)
         #(1-f)T - Trading interval (fraction f of period T) 
-        var_o = df_roll["norm_open"].rolling_var(window_size=window, ddof=1) #E[V_o] = σ^2f
-        var_c = df_roll["norm_close"].rolling_var(window_size=window, ddof=1) #E[V_c] = σ^2(1-f)
-        var_rs = df_roll["rs"].rolling_mean(window_size=window) #E[V_rs] = σ^2(1-f)
+        var_o = df_roll["norm_open"].rolling_var(window_size=window, ddof=1) #E[V_o] = σ^2f (overnight vol)
+        var_c = df_roll["norm_close"].rolling_var(window_size=window, ddof=1) #E[V_c] = σ^2(1-f) (close-to-close vol)
+        var_rs = df_roll["rs"].rolling_mean(window_size=window) #E[V_rs] = σ^2(1-f) (rogers-satchell vol (OHLC))
 
         n = window
         k = (alpha - 1) / (alpha + (n+1)/(n-1)) #k can never reach 0 or 1, so neither V_cc or V_rs alone can find the minimum variance
@@ -47,7 +47,7 @@ class Risk:
         return vol
 
     def garch_vol(self, df): 
-        #conditional variance (h_t) = unconditional variance (w) + q ∑ a*past squared shicks (ε^2) + p ∑ b*past conditional variance (h_t)
+        #conditional variance (h_t) = unconditional variance (w/(1-(a+b)) + q ∑ a*past squared shocks (ε^2) + p ∑ b*past conditional variance (h_t)
         #E[h_t] = sigma^2 =  w/(1-(a+b)), so ∑a + ∑b < 1 for it to be stationary (else no unconditional variance)
         #QMLE using pseudo-correlation matrix
         
