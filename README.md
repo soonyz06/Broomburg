@@ -16,10 +16,11 @@ for me to test and learn concepts, so alot of stuff are scuffed,
  ![commands](config/img/help.png)
  * Uses dash for web application (vibe coded cuz i aint learning webdev)
  * Registry pattern to parse and execute commands
- * Able to auto populate [spreadsheets](data/output/fa_models) for DCF
  ![fa](config/img/fa.png)
  ![p](config/img/p.png)
  ![n](config/img/n.png)
+ ![fa](config/img/gs.png)
+- Data standardised
  ![txt](config/img/txt.png)
 - Potential for semantic chunking and storing in vector database for RAG and stuff
 
