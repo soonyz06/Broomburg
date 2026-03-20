@@ -19,8 +19,7 @@ for me to test and learn concepts, so alot of stuff are scuffed,
  ![fa](config/img/fa.png)
  ![p](config/img/p.png)
  ![n](config/img/n.png)
- ![fa](config/img/gs.png)
-- Data standardised
+- Data standardised (fix fnce)
  ![txt](config/img/txt.png)
 - Potential for semantic chunking and storing in vector database for RAG and stuff
 
