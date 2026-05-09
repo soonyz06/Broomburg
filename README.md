@@ -1,4 +1,4 @@
-for me to test and learn concepts, so alot of stuff are scuffed, 
+for me to test and learn concepts, so alot of stuff are scuffed, to be redone soon as framework for hypothesis testing
 
 # Data Engineering
   - Polars: Lazy query plan, hive partitioning, batch I/O operations, file sizing, versioning, compact jobs, schema enforcement, etc
